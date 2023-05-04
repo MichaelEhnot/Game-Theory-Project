@@ -108,11 +108,11 @@ for i in range(num_rooms):
         for j in range(num_participants):
             if np.sum(probability_matrix_uniform[j]) != 0:
                 uniform_prob_pairs[j] = i
-                probability_matrix_uniform[j] = np.zeros(10)
+                probability_matrix_uniform[j] = np.zeros(num_participants)
     else:
         winner = np.random.choice(np.arange(num_participants), p=probability_matrix_uniform[:,i])
         uniform_prob_pairs[winner] = i
-        probability_matrix_uniform[winner] = np.zeros(10)
+        probability_matrix_uniform[winner] = np.zeros(num_participants)
     #recompute probabilites
     probability_matrix_uniform = normalizeColumns(probability_matrix_uniform)
     
@@ -122,11 +122,11 @@ for i in range(num_rooms):
         for j in range(num_participants):
             if np.sum(probability_matrix_correlated[j]) != 0:
                 correrlated_prob_pairs[j] = i
-                probability_matrix_correlated[j] = np.zeros(10)
+                probability_matrix_correlated[j] = np.zeros(num_participants)
     else:
         winner = np.random.choice(np.arange(num_participants), p=probability_matrix_correlated[:,i])
         correrlated_prob_pairs[winner] = i
-        probability_matrix_correlated[winner] = np.zeros(10)
+        probability_matrix_correlated[winner] = np.zeros(num_participants)
     #recompute probabilites
     probability_matrix_correlated = normalizeColumns(probability_matrix_correlated)
 
