@@ -20,9 +20,12 @@ for i in range(num_participants):
     uniform_prefs[i] = np.random.permutation(np.arange(10))
     correlated_prefs[i] = np.append(np.random.permutation(np.arange(5)), np.random.permutation(np.arange(5,10)))
 
-# pprint.pprint(uniform_prefs)
-# print()
-# pprint.pprint(correlated_prefs)
+print("uniform prefs:")
+pprint.pprint(uniform_prefs)
+print()
+print("correlated prefs:")
+pprint.pprint(correlated_prefs)
+print()
 
 #begin serial dictatorship
 selection_order = np.random.permutation(np.arange(num_participants))
@@ -46,9 +49,9 @@ for i in selection_order:
             correrlated_serial_pairs[i] = j
             break
 
-print("Uniform serial:")
+print("Uniform serial pairs:")
 pprint.pprint(uniform_serial_pairs)
-print("Correlated serial:")
+print("Correlated serial pairs:")
 pprint.pprint(correrlated_serial_pairs)
 
 #begin probabalistic serial mechanism
@@ -84,10 +87,10 @@ for i in itertools.cycle(selection_order):
     if available_items_correlated.size == 0:
         break
 
-print(probability_matrix_uniform)
-print()
-print(probability_matrix_correlated)
-print()
+# print(probability_matrix_uniform)
+# print()
+# print(probability_matrix_correlated)
+# print()
 
 #convert shares to probablilites
 probability_matrix_correlated = normalizeColumns(probability_matrix_correlated)
@@ -127,6 +130,26 @@ for i in range(num_rooms):
     #recompute probabilites
     probability_matrix_correlated = normalizeColumns(probability_matrix_correlated)
 
-print(uniform_prob_pairs)
-print(correrlated_prob_pairs)
+# print(uniform_prob_pairs)
+# print(correrlated_prob_pairs)
+# print()
+
+uniform_serial_utility = {}
+correlated_serial_utility = {}
+uniform_prob_utility = {}
+correlated_prob_utility = {}
+
+for i in range(num_participants):
+    uniform_serial_utility[i] = np.where(uniform_prefs[i] == uniform_serial_pairs[i])[0][0]
+    correlated_serial_utility[i] = np.where(correlated_prefs[i] == correrlated_serial_pairs[i])[0][0]
+    uniform_prob_utility[i] = np.where(uniform_prefs[i] == uniform_prob_pairs[i])[0][0]
+    correlated_prob_utility[i] = np.where(correlated_prefs[i] == correrlated_prob_pairs[i])[0][0]
+
+print("uniform: serial vs prob")
+print(uniform_serial_utility)
+print(uniform_prob_utility)
+
+print("correlated: serial vs prob")
+print(correlated_serial_utility)
+print(correlated_prob_utility)
     
