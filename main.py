@@ -4,7 +4,7 @@ import itertools
 import statistics
 from matplotlib import pyplot as plt
 
-
+# used to re-calculate column probabilities
 def normalizeColumns(matrix):
     for j in range(len(matrix)):
         if np.sum(matrix[:,j]) != 0:
@@ -27,7 +27,6 @@ def singleSimulation():
         correlated_prefs[i] = np.append(np.random.permutation(np.arange(10)), np.random.permutation(np.arange(10,20)))
         correlated_prefs[i] = np.append(correlated_prefs[i], np.random.permutation(np.arange(20,30)))
         correlated_prefs[i] = np.append(correlated_prefs[i], np.random.permutation(np.arange(30,40)))
-        # correlated_prefs[i] = np.append(correlated_prefs[i], np.random.permutation(np.arange(40,50)))
 
     # print("uniform prefs:")
     # pprint.pprint(uniform_prefs)
@@ -45,6 +44,7 @@ def singleSimulation():
     uniform_serial_pairs = {}
     correrlated_serial_pairs = {}
 
+    # iterate over random selection order and look for first availible preference
     for i in selection_order:   
         for j in uniform_prefs[i]:
             if j in available_items_uniform:
@@ -76,7 +76,7 @@ def singleSimulation():
         available_items_correlated = np.append(available_items_correlated, np.full(num_shares, i))
         available_items_uniform = np.append(available_items_uniform, np.full(num_shares, i))
 
-    # select shares for uniform prefs
+    # select shares for uniform prefs by cycling over each player
     for i in itertools.cycle(selection_order):
         for j in uniform_prefs[i]:
             if j in available_items_uniform:
@@ -86,7 +86,7 @@ def singleSimulation():
         if available_items_uniform.size == 0:
             break
 
-    # select shares for correlated prefs
+    # select shares for correlated prefs by cycling over each player
     for i in itertools.cycle(selection_order):
         for j in correlated_prefs[i]:
             if j in available_items_correlated:
@@ -119,6 +119,7 @@ def singleSimulation():
                     uniform_prob_pairs[j] = i
                     probability_matrix_uniform[j] = np.zeros(num_participants)
         else:
+            # use probabilites to draw a winner
             winner = np.random.choice(np.arange(num_participants), p=probability_matrix_uniform[:,i])
             uniform_prob_pairs[winner] = i
             probability_matrix_uniform[winner] = np.zeros(num_participants)
@@ -133,6 +134,7 @@ def singleSimulation():
                     correrlated_prob_pairs[j] = i
                     probability_matrix_correlated[j] = np.zeros(num_participants)
         else:
+            # use probabilities to draw winner
             winner = np.random.choice(np.arange(num_participants), p=probability_matrix_correlated[:,i])
             correrlated_prob_pairs[winner] = i
             probability_matrix_correlated[winner] = np.zeros(num_participants)
@@ -149,6 +151,7 @@ def singleSimulation():
     uniform_prob_utility = {}
     correlated_prob_utility = {}
 
+    # find index of pairing in preference list
     for i in range(num_participants):
         uniform_serial_utility[i] = np.where(uniform_prefs[i] == uniform_serial_pairs[i])[0][0]
         correlated_serial_utility[i] = np.where(correlated_prefs[i] == correrlated_serial_pairs[i])[0][0]
@@ -167,14 +170,14 @@ def singleSimulation():
     util_names = ["uniform serial utility", "uniform probabalistic utility", "correlated serial utility", "correlated probabalistic utility"]
 
     # graph utility distributions
-    # for i in range(len(utilities)):
-    #     keys = list(utilities[i].keys())
-    #     vals = list(utilities[i].values())
+    for i in range(len(utilities)):
+        keys = list(utilities[i].keys())
+        vals = list(utilities[i].values())
 
-    #     plt.ylim(0,10)
-    #     plt.title(util_names[i])
-    #     plt.bar(keys, sorted(vals))
-    #     plt.show()
+        plt.ylim(0,num_participants)
+        plt.title(util_names[i])
+        plt.bar(keys, sorted(vals))
+        plt.show()
 
     total_utilities = {}
     variances = {}
@@ -186,26 +189,28 @@ def singleSimulation():
 
 
 def main():
-    num_simulations = 100
-    util_sums = np.array([0,0,0,0])
-    variance_sums = np.array([0,0,0,0])
+    # num_simulations = 100
+    # util_sums = np.array([0,0,0,0])
+    # variance_sums = np.array([0,0,0,0])
 
-    for i in range(num_simulations):
-        print(i)
-        utils, variances = singleSimulation()
-        for j in range(len(util_sums)):
-            util_sums[j] += utils[j]
-            variance_sums[j] += variances[j]
+    # for i in range(num_simulations):
+    #     print(i)
+    #     utils, variances = singleSimulation()
+    #     for j in range(len(util_sums)):
+    #         util_sums[j] += utils[j]
+    #         variance_sums[j] += variances[j]
 
-    print()
-    print("Average utility for uniform preferences: (serial vs probabablistic)")
-    print((util_sums/num_simulations)[0:2])
-    print("Average utility for correlated preferences: (serial vs probabablistic)")
-    print((util_sums/num_simulations)[2:])
-    print("Average variance for uniform preferences: (serial vs probabalistic)")
-    print((variance_sums/num_simulations)[0:2])
-    print("Average variance for correlated preferences: (serial vs probabalistic)")
-    print((variance_sums/num_simulations)[2:])
+    # print()
+    # print("Average utility for uniform preferences: (serial vs probabablistic)")
+    # print((util_sums/num_simulations)[0:2])
+    # print("Average utility for correlated preferences: (serial vs probabablistic)")
+    # print((util_sums/num_simulations)[2:])
+    # print("Average variance for uniform preferences: (serial vs probabalistic)")
+    # print((variance_sums/num_simulations)[0:2])
+    # print("Average variance for correlated preferences: (serial vs probabalistic)")
+    # print((variance_sums/num_simulations)[2:])
+
+    singleSimulation()
 
 if __name__ == "__main__":
     main()
