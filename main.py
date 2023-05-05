@@ -1,6 +1,7 @@
 import numpy as np
 import pprint
 import itertools
+from matplotlib import pyplot as plt
 
 num_participants = 10
 num_rooms = num_participants
@@ -152,4 +153,19 @@ print(uniform_prob_utility)
 print("correlated: serial vs prob")
 print(correlated_serial_utility)
 print(correlated_prob_utility)
+
+utilities  = [uniform_serial_utility, uniform_prob_utility, correlated_serial_utility, correlated_prob_utility]
+util_names = ["uniform serial utility", "uniform probabalistic utility", "correlated serial utility", "correlated probabalistic utility"]
+
+# graph utility distributions
+for i in range(len(utilities)):
+    keys = list(utilities[i].keys())
+    vals = list(utilities[i].values())
+
+    plt.ylim(0,10)
+    plt.title(util_names[i])
+    plt.bar(keys, sorted(vals))
+    plt.show()
+
+
     
