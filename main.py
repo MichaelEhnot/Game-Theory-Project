@@ -12,7 +12,8 @@ def normalizeColumns(matrix):
     return matrix
 
 def singleSimulation():
-    num_participants = 10
+    #num_participants = 10
+    num_participants = 30
     num_rooms = num_participants
 
     #create participants and preferences
@@ -21,15 +22,19 @@ def singleSimulation():
     correlated_prefs = {}
 
     for i in range(num_participants):
-        uniform_prefs[i] = np.random.permutation(np.arange(10))
-        correlated_prefs[i] = np.append(np.random.permutation(np.arange(5)), np.random.permutation(np.arange(5,10)))
+        uniform_prefs[i] = np.random.permutation(np.arange(num_participants))
+        #correlated_prefs[i] = np.append(np.random.permutation(np.arange(5)), np.random.permutation(np.arange(5,10)))
+        correlated_prefs[i] = np.append(np.random.permutation(np.arange(10)), np.random.permutation(np.arange(10,20)))
+        correlated_prefs[i] = np.append(correlated_prefs[i], np.random.permutation(np.arange(20,30)))
+        correlated_prefs[i] = np.append(correlated_prefs[i], np.random.permutation(np.arange(30,40)))
+        # correlated_prefs[i] = np.append(correlated_prefs[i], np.random.permutation(np.arange(40,50)))
 
-    print("uniform prefs:")
-    pprint.pprint(uniform_prefs)
-    print()
-    print("correlated prefs:")
-    pprint.pprint(correlated_prefs)
-    print()
+    # print("uniform prefs:")
+    # pprint.pprint(uniform_prefs)
+    # print()
+    # print("correlated prefs:")
+    # pprint.pprint(correlated_prefs)
+    # print()
 
     #begin serial dictatorship
     selection_order = np.random.permutation(np.arange(num_participants))
@@ -53,10 +58,10 @@ def singleSimulation():
                 correrlated_serial_pairs[i] = j
                 break
 
-    print("Uniform serial pairs:")
-    pprint.pprint(uniform_serial_pairs)
-    print("Correlated serial pairs:")
-    pprint.pprint(correrlated_serial_pairs)
+    # print("Uniform serial pairs:")
+    # pprint.pprint(uniform_serial_pairs)
+    # print("Correlated serial pairs:")
+    # pprint.pprint(correrlated_serial_pairs)
 
     #begin probabalistic serial mechanism
     available_items_correlated = []
@@ -150,13 +155,13 @@ def singleSimulation():
         uniform_prob_utility[i] = np.where(uniform_prefs[i] == uniform_prob_pairs[i])[0][0]
         correlated_prob_utility[i] = np.where(correlated_prefs[i] == correrlated_prob_pairs[i])[0][0]
 
-    print("uniform: serial vs prob")
-    print(uniform_serial_utility)
-    print(uniform_prob_utility)
+    # print("uniform: serial vs prob")
+    # print(uniform_serial_utility)
+    # print(uniform_prob_utility)
 
-    print("correlated: serial vs prob")
-    print(correlated_serial_utility)
-    print(correlated_prob_utility)
+    # print("correlated: serial vs prob")
+    # print(correlated_serial_utility)
+    # print(correlated_prob_utility)
 
     utilities  = [uniform_serial_utility, uniform_prob_utility, correlated_serial_utility, correlated_prob_utility]
     util_names = ["uniform serial utility", "uniform probabalistic utility", "correlated serial utility", "correlated probabalistic utility"]
@@ -186,6 +191,7 @@ def main():
     variance_sums = np.array([0,0,0,0])
 
     for i in range(num_simulations):
+        print(i)
         utils, variances = singleSimulation()
         for j in range(len(util_sums)):
             util_sums[j] += utils[j]
