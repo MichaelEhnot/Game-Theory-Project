@@ -13,7 +13,7 @@ def normalizeColumns(matrix):
 
 def singleSimulation():
     #num_participants = 10
-    num_participants = 30
+    num_participants = 40
     num_rooms = num_participants
 
     #create participants and preferences
